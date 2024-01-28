@@ -7,23 +7,24 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const ParentComponent: React.FC = () => {
+
   // 現在の年月の状態を保持
-  const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
-  const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth() + 1);
+  let [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  let [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth() + 1);
 
   // 前の月に移動
   const goToPreviousMonth = () => {
-    setCurrentMonth((prevMonth) => prevMonth === 1 ? 12 : prevMonth - 1);
-    if (currentMonth === 1) {
-      setCurrentYear((prevYear) => prevYear - 1);
+    setSelectedMonth((prevMonth) => prevMonth === 1 ? 12 : prevMonth - 1);
+    if (selectedMonth === 1) {
+      setSelectedYear((prevYear) => prevYear - 1);
     }
   };
 
   // 次の月に移動
   const goToNextMonth = () => {
-    setCurrentMonth((prevMonth) => prevMonth === 12 ? 1 : prevMonth + 1);
-    if (currentMonth === 12) {
-      setCurrentYear((prevYear) => prevYear + 1);
+    setSelectedMonth((prevMonth) => prevMonth === 12 ? 1 : prevMonth + 1);
+    if (selectedMonth === 12) {
+      setSelectedYear((prevYear) => prevYear + 1);
     }
   };
 
@@ -36,7 +37,7 @@ const ParentComponent: React.FC = () => {
           <button className="p-2 rounded-md " onClick={goToNextMonth}><ArrowForwardIosIcon/></button>
         </div>
         {/* 年月の表示 */}
-        <span className="text-lg font-bold text-gray-600">{currentYear}年{currentMonth}月</span>
+        <span className="text-lg font-bold text-gray-600">{selectedYear}年{selectedMonth}月</span>
       </div>
       <div className="bg-white shadow-lg rounded-lg p-5">
         <div className="grid grid-cols-7 text-center border border-gray-300">
@@ -48,7 +49,7 @@ const ParentComponent: React.FC = () => {
           <div className="w-full h-12 font-bold text-xs text-gray-600 border border-gray-300 py-1">金</div>
           <div className="w-full h-12 font-bold text-xs text-gray-600 border border-gray-300 py-1">土</div>      
           {/* CalendarComponent のレンダリング */}
-          <CalendarComponent year={currentYear} month={currentMonth} />
+          <CalendarComponent year={selectedYear} month={selectedMonth} />
           </div>
       </div>
     </>

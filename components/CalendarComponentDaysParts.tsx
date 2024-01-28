@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Props {
   year: number;
@@ -10,6 +10,11 @@ const CalendarComponent: React.FC<Props> = ({ year, month }) => {
   let day : Date = new Date(year, month - 1, 1);
   const end_of_month : Date = new Date(year, month, 0);
   const cal : number[][] = make_cal(day, end_of_month);
+
+  const today = new Date();
+  const todayDate = today.getDate();
+  const currentMonth = today.getMonth() + 1;
+  const currentYear = today.getFullYear();
 
   function make_cal(day: Date, end_of_month: Date): number[][] {
 
@@ -34,16 +39,19 @@ const CalendarComponent: React.FC<Props> = ({ year, month }) => {
 
   return (
     <>
-        {/* 日付のセルを動的に生成 */}
-        {cal.map((week, i) =>
-          week.map((day, j) =>
-            <div key={`day-${i}-${j}`} className="w-full h-20 border py-2 border-gray-300">
+      {/* 日付のセルを動的に生成 */}
+      {cal.map((week, i) =>
+        week.map((day, j) => {
+          // 今日の日付かどうかを確認
+          const isToday = day === todayDate && month === currentMonth && year === currentYear;
+          return (
+            <div key={`day-${i}-${j}`} className={`w-full h-20 border py-2 border-gray-300 ${isToday ? 'bg-gray-200' : ''}`}>
               {day || ''}
             </div>
-          )
-        )}
+          );
+        })
+      )}
     </>
-
   );
 }
 
