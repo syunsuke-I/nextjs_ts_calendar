@@ -42,7 +42,7 @@ const CalendarComponent: React.FC<Props> = ({ year, month }) => {
       // 今日の日付かどうかを確認
       const isToday = day === todayDate && month === currentMonth && year === currentYear;
       return (
-        <div key={`day-${i}-${j}`} className={`w-full h-28 border py-2 border-gray-300 ${isToday ? 'bg-gray-200' : ''} ${i === 0 ? 'border-t-0' : ''}`}>
+        <div key={`day-${i}-${j}`} className={`w-full border py-2 border-gray-300 ${isToday ? 'bg-gray-200' : ''} ${i === 0 ? 'border-t-0 h-24' : 'h-28'}`}>
           {day || ''}
         </div>
       );

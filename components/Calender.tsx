@@ -40,11 +40,11 @@ const ParentComponent: React.FC = () => {
   return (
     <>
       <div className="flex items-center justify-between mb-4 p-3">
-        <div className="flex items-center mb-4 p-8">
+        <div className="flex items-center mb-4 p-4">
           {/* 月を切り替えるボタン */}
-          <div className="space-x-2">
-            <button className="p-2 rounded-md " onClick={goToPreviousMonth}><ArrowBackIosNewIcon/></button>
-            <button className="p-2 rounded-md " onClick={goToNextMonth}><ArrowForwardIosIcon/></button>
+          <div className="space-x-1">
+            <button className="rounded-md" onClick={goToPreviousMonth}><ArrowBackIosNewIcon/></button>
+            <button className="rounded-md" onClick={goToNextMonth}><ArrowForwardIosIcon/></button>
           </div>
           {/* 年月の表示 */}
           <span className="text-lg font-bold text-gray-600">{selectedYear}年{selectedMonth}月</span>
@@ -66,7 +66,7 @@ const ParentComponent: React.FC = () => {
           </span>
         </div>
       </div> 
-      <div className="bg-white shadow-lg rounded-lg p-5">
+      <div className="bg-white rounded-lg p-5">
         <div className="grid grid-cols-7 text-center">
           <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">日</div>
           <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">月</div>
