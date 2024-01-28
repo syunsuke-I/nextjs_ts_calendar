@@ -1,3 +1,6 @@
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+
 function Calendar() {
   
   return (
@@ -5,8 +8,8 @@ function Calendar() {
       <div className="flex justify-between items-center mb-4">
         <span className="text-lg font-bold text-gray-600">2024年1月</span>
         <div className="space-x-2">
-          <button className="p-2 rounded-md bg-blue-500 text-white">前の月</button>
-          <button className="p-2 rounded-md bg-blue-500 text-white">次の月</button>
+          <button className="p-2 rounded-md "><ArrowBackIosNewIcon/></button>
+          <button className="p-2 rounded-md "><ArrowForwardIosIcon/></button>
         </div>
       </div>
       <div className="grid grid-cols-7 text-center border border-gray-300">
