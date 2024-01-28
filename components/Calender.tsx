@@ -40,9 +40,9 @@ const ParentComponent: React.FC = () => {
   return (
     <>
       <div className="flex items-center justify-between mb-4 p-3">
-        <div className="flex items-center mb-4 p-4">
+        <div className="flex items-center mb-4 p-5">
           {/* 月を切り替えるボタン */}
-          <div className="space-x-1">
+          <div className="space-x-1 pr-5">
             <button className="rounded-md" onClick={goToPreviousMonth}><ArrowBackIosNewIcon/></button>
             <button className="rounded-md" onClick={goToNextMonth}><ArrowForwardIosIcon/></button>
           </div>
@@ -51,7 +51,7 @@ const ParentComponent: React.FC = () => {
         </div>
         <div className="flex items-center mb-4 p-3 gap-2">
           {/* 月と週の切り替え */}
-          <div className="relative inline-block text-left">
+          <div className="relative inline-block text-left pr-1">
             <select id="countries" className="p-3 border border-gray-300 custom-select" value={selectedOption} onChange={handleSelectChange}>
               <option value="month">月</option>
               <option value="week">週</option>
