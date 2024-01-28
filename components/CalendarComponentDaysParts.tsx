@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 interface Props {
   year: number;
   month: number;
+  selectedOption : "month" | "week"
 }
 
-const CalendarComponent: React.FC<Props> = ({ year, month }) => {
+const CalendarComponent = ({ year, month, selectedOption } : Props) => {
   // カレンダーのデータを生成
   let day : Date = new Date(year, month - 1, 1);
   const end_of_month : Date = new Date(year, month, 0);
@@ -37,17 +38,37 @@ const CalendarComponent: React.FC<Props> = ({ year, month }) => {
     return cal;
   }
 
-  return cal.flatMap((week, i) =>
-    week.map((day, j) => {
-      // 今日の日付かどうかを確認
-      const isToday = day === todayDate && month === currentMonth && year === currentYear;
-      return (
-        <div key={`day-${i}-${j}`} className={`w-full border py-2 border-gray-300 ${isToday ? 'bg-gray-200' : ''} ${i === 0 ? 'border-t-0 h-24' : 'h-28'}`}>
-          {day || ''}
-        </div>
-      );
-    })
-);
+  return(
+    <>
+      {selectedOption !== "week" ? 
+        (
+          cal.map((week, i) =>
+            week.map((day, j) => {
+              // 今日の日付かどうかを確認
+              const isToday = day === todayDate && month === currentMonth && year === currentYear;
+              return (
+                <div key={`day-${i}-${j}`} className={`w-full h-28 border py-2 border-gray-300 ${isToday ? 'bg-gray-200' : ''} ${i === 0 ? 'border-t-0' : ''}`}>
+                  {day || ''}
+                </div>
+              );
+            })
+          )
+        ) 
+        : 
+        (
+          cal[0].map((day, j) => {
+            // 今日の日付かどうかを確認
+            const isToday = day === todayDate && month === currentMonth && year === currentYear;
+            return (
+              <div key={`day-0-${j}`} className={`w-full border-t-0 h-svh border py-2 border-gray-300 ${isToday ? 'bg-gray-200' : ''}`}>
+                {day || ''}
+              </div>
+            );
+          })
+        )
+      }
+    </>
+  )
 }
 
 export default CalendarComponent;

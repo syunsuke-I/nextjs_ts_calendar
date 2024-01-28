@@ -8,18 +8,25 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-const ParentComponent: React.FC = () => {
+
+type OptionType = 'month' | 'week';
+
+const ParentComponent = () => {
 
   // 現在の年月の状態を保持
   let [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   let [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth() + 1);
 
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState<OptionType>('month');
 
   // オプションが選択されたときのハンドラ
-  const handleSelectChange = (event : React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(event.target.value);
-  };  
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+    if (value === 'month' || value === 'week') {
+      setSelectedOption(value as unknown as OptionType);
+    }
+  };
+  
 
   // 前の月に移動
   const goToPreviousMonth = () => {
@@ -66,19 +73,24 @@ const ParentComponent: React.FC = () => {
           </span>
         </div>
       </div> 
-      <div className="bg-white rounded-lg p-5">
-        <div className="grid grid-cols-7 text-center">
-          <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">日</div>
-          <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">月</div>
-          <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">火</div>
-          <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">水</div>
-          <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">木</div>
-          <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">金</div>
-          <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">土</div>      
-          {/* CalendarComponent のレンダリング */}
-          <CalendarComponent year={selectedYear} month={selectedMonth} />
-          </div>
-      </div>
+      
+        <div className="bg-white rounded-lg p-5">
+          <div className="grid grid-cols-7 text-center">
+            <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">日</div>
+            <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">月</div>
+            <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">火</div>
+            <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">水</div>
+            <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">木</div>
+            <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">金</div>
+            <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">土</div>
+            {/* CalendarComponent のレンダリング */}
+            {selectedOption !== "week" ? (   
+              <CalendarComponent year={selectedYear} month={selectedMonth} selectedOption={selectedOption}/>
+            ) : 
+              <CalendarComponent year={selectedYear} month={selectedMonth} selectedOption={selectedOption}/>
+            }
+            </div>
+        </div>
     </>
   );
 };
