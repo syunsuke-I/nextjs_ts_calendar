@@ -28,11 +28,13 @@ const ParentComponent = () => {
   let firstDayOfPreviousMonth = startOfPreviousMonth.getDay(); // 前の月の最初の日が週のどの日にあたるかを取得
   let weeksInPreviousMonth = Math.ceil((endOfPreviousMonth.getDate() + firstDayOfPreviousMonth) / 7); // 前の月の週数を計算
 
+  let [isAdd, setIsAdd] = useState(false);
+
   // オプションが選択されたときのハンドラ
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     if (value === 'month' || value === 'week') {
-      setSelectedOption(value as unknown as OptionType);
+      setSelectedOption(value as OptionType);
     }
   };
 
@@ -86,44 +88,43 @@ const ParentComponent = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between mb-4 p-3">
-        <div className="flex items-center mb-4 p-5">
-          {/* 月を切り替えるボタン */}
-          {selectedOption !== "week" ? 
-          (
-            <div className="space-x-1 pr-5">
-              <button className="rounded-md" onClick={goToPreviousMonth}><ArrowBackIosNewIcon/></button>
-              <button className="rounded-md" onClick={goToNextMonth}><ArrowForwardIosIcon/></button>
+      <div className={`rounded-lg p-5 relative ${isAdd ? 'z-50' : 'z-0'}`}>
+        <div className="flex items-center justify-between mb-4 p-3">
+          <div className="flex items-center mb-4 p-5">
+            {/* 月を切り替えるボタン */}
+            {selectedOption !== "week" ? 
+              (
+                <div className="space-x-1 pr-5">
+                  <button className="rounded-md" onClick={goToPreviousMonth}><ArrowBackIosNewIcon/></button>
+                  <button className="rounded-md" onClick={goToNextMonth}><ArrowForwardIosIcon/></button>
+                </div>
+              ) :            
+                <div className="space-x-1 pr-5">
+                  <button className="rounded-md" onClick={goToPreviousWeek}><ArrowBackIosNewIcon/></button>
+                  <button className="rounded-md" onClick={goToNextWeek}><ArrowForwardIosIcon/></button>
+                </div>
+              }
+            {/* 年月の表示 */}
+            <span className="text-lg font-bold text-gray-600">{selectedYear}年{selectedMonth}月</span>
+          </div>
+          <div className="flex items-center mb-4 p-3 gap-2">
+            {/* 月と週の切り替え */}
+            <div className="relative inline-block text-left pr-1">
+              <select id="countries" className={`p-3 border custom-select border-gray-300`} value={selectedOption} onChange={handleSelectChange}>
+                <option value="month">月</option>
+                <option value="week">週</option>
+              </select>
+              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-gray-600">
+                <ArrowDropDownIcon />
+              </span>
             </div>
-          ) :            
-            <div className="space-x-1 pr-5">
-              <button className="rounded-md" onClick={goToPreviousWeek}><ArrowBackIosNewIcon/></button>
-              <button className="rounded-md" onClick={goToNextWeek}><ArrowForwardIosIcon/></button>
-            </div>
-          }
-
-          {/* 年月の表示 */}
-          <span className="text-lg font-bold text-gray-600">{selectedYear}年{selectedMonth}月</span>
-        </div>
-        <div className="flex items-center mb-4 p-3 gap-2">
-          {/* 月と週の切り替え */}
-          <div className="relative inline-block text-left pr-1">
-            <select id="countries" className="p-3 border border-gray-300 custom-select" value={selectedOption} onChange={handleSelectChange}>
-              <option value="month">月</option>
-              <option value="week">週</option>
-            </select>
-            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-gray-600">
-              <ArrowDropDownIcon />
+            {/* 追加ボタン */}
+            <span className="text-lg font-bold z-50" onClick={() => setIsAdd(!isAdd)}>
+              <AddIcon/>
             </span>
           </div>
-          {/* 追加ボタン */}
-          <span className="text-lg font-bold text-gray-600">
-            <AddIcon/>
-          </span>
         </div>
-      </div> 
-      
-        <div className="bg-white rounded-lg p-5">
+        <div className={` rounded-lg p-5  bg-white `}>
           <div className="grid grid-cols-7 text-center">
             <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">日</div>
             <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">月</div>
@@ -133,9 +134,17 @@ const ParentComponent = () => {
             <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">金</div>
             <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">土</div>
             {/* CalendarComponent のレンダリング */}
-              <CalendarComponent year={selectedYear} month={selectedMonth} selectedOption={selectedOption} selectedWeek={selectedWeek} />
+              <CalendarComponent 
+                year={selectedYear} 
+                month={selectedMonth} 
+                selectedOption={selectedOption} 
+                selectedWeek={selectedWeek}
+                isAdd={isAdd}
+                setIsAdd={setIsAdd} 
+              />
             </div>
         </div>
+      </div>
     </>
   );
 };
