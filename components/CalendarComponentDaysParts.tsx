@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
+import {createCalendarData} from '../utils/utils'; 
 
 interface Props {
   year: number;
   month: number;
+  selectedWeek : number
   selectedOption : "month" | "week"
 }
 
-const CalendarComponent = ({ year, month, selectedOption } : Props) => {
+const CalendarComponent = ({ year, month, selectedWeek ,selectedOption } : Props) => {
   // カレンダーのデータを生成
-  let day : Date = new Date(year, month - 1, 1);
-  const end_of_month : Date = new Date(year, month, 0);
+  const { day, end_of_month } = createCalendarData(year, month);
   const cal : number[][] = make_cal(day, end_of_month);
 
   const today = new Date();
@@ -25,9 +26,10 @@ const CalendarComponent = ({ year, month, selectedOption } : Props) => {
   
     // カレンダーの初期化
     let cal: number[][] = new Array(weeksInMonth).fill(null).map(() => new Array(7).fill(null));
-  
+
     // 第何週かを管理する
-    let week_num : number = 0;
+    let week_num : number = 0; 
+  
     day.setDate(1);  // 日付を月の初日にリセット
   
     for (let i = 1; i <= end_of_month.getDate(); i++) {
@@ -56,7 +58,7 @@ const CalendarComponent = ({ year, month, selectedOption } : Props) => {
         ) 
         : 
         (
-          cal[0].map((day, j) => {
+          cal[selectedWeek].map((day, j) => {
             // 今日の日付かどうかを確認
             const isToday = day === todayDate && month === currentMonth && year === currentYear;
             return (
