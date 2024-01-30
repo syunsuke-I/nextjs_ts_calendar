@@ -1,4 +1,7 @@
+import { UUID } from 'crypto';
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
   isAdd : boolean
@@ -6,13 +9,25 @@ interface Props {
 }
 
 interface Schedule {
-  date: string;
-  tasks: string[];
+  id : string
+  title: string;
+  at : number
 }
 
 const AddFormComponent = ({ isAdd,setIsAdd } : Props) =>{
 
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const { register, handleSubmit } = useForm<Schedule>();
+  const [schedules, setSchedules] = useState<Schedule>();
+
+  const onSubmit = (data : Schedule) => {
+    const uniqueId : string = uuidv4();
+    const newSchedule: Schedule = {
+      id : uniqueId,
+      title : data.title,
+      at : data.at,
+    }
+    setSchedules(newSchedule); 
+  };
 
   return(
     <div className={` ${isAdd ? 'fixed inset-0 bg-gray-600 bg-opacity-50 z-40 flex items-center justify-center overflow-y-auto overflow-x-hidden top-0 right-0 left-0 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full'  : 'z-0 hidden'}`}>
@@ -27,15 +42,15 @@ const AddFormComponent = ({ isAdd,setIsAdd } : Props) =>{
             </button>
         </div>
       </div>
-      <form className="p-4 md:p-5">
+      <form className="p-4 md:p-5" onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-4 mb-4 grid-cols-2">
             <div className="col-span-2">
-                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 "></label>
-                    <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="タイトルを追加"/>
+                    <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 "></label>
+                    <input type="text" id="title" {...register('title')} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="タイトルを追加"/>
                 </div>
                 <div className="col-span-2 sm:col-span-1 py-5">
-                    <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"></label>
-                    <input type="date" name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="$2999"/>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"></label>
+                    <input type="date" id="at" {...register('at')} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="$2999"/>
                 </div>
             </div>
             <button type="submit" className="pt-5 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">保存</button>
