@@ -8,7 +8,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-import {createCalendarData} from '../utils/utils'; 
+import {createCalendarData} from '../../utils/utils'; 
 
 type OptionType = 'month' | 'week';
 
@@ -140,7 +140,7 @@ const ParentComponent = () => {
                 selectedOption={selectedOption} 
                 selectedWeek={selectedWeek}
                 isAdd={isAdd}
-                setIsAdd={setIsAdd} 
+                setIsAdd={setIsAdd}
               />
             </div>
         </div>
