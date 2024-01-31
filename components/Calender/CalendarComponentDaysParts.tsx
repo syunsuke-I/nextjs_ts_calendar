@@ -23,6 +23,17 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
   const currentYear = today.getFullYear();
 
   const [schedules, setSchedules] = useState<Schedule[]>([]);
+  let [isDetailsShown, setIsDetailsShown] = useState(false);
+
+  const filterSchedulesForDay = (schedules: Schedule[], year: number, month: number, day: number) : Schedule[] => {
+    return schedules.filter(schedule => {
+      const scheduleDate : Date = new Date(schedule.at);
+      const scheduleYear : number = scheduleDate.getFullYear();
+      const scheduleMonth  : number = scheduleDate.getMonth() + 1; // getMonth()は0から始まるため、1を足す
+      const scheduleDay : number = scheduleDate.getDate();
+      return scheduleYear === year && scheduleMonth === month && scheduleDay === day;
+    });
+  };  
 
   function make_cal(day: Date, end_of_month: Date): number[][] {
 
@@ -46,6 +57,11 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
     return cal;
   }
 
+  function showDetails(scheduleId : string){
+    console.log(scheduleId)
+    setIsDetailsShown(!isDetailsShown)
+  }
+
   return(
     <>
       {selectedOption !== "week" ? 
@@ -58,20 +74,46 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
                 <div key={`day-${i}-${j}`} className={`w-full h-28 border py-2 border-gray-300 flex flex-col ${isToday ? 'bg-gray-200' : ''} ${i === 0 ? 'border-t-0' : ''}`}>
                   <div className="text-sm">{day || ''}</div>
                   {/* 予定を表示する部分 */}
-                  <div className="flex-1 overflow-y-auto p-1">
-                    {schedules.filter(schedule => {
-                      const scheduleDate = new Date(schedule.at);
-                      const scheduleYear = scheduleDate.getFullYear();
-                      const scheduleMonth = scheduleDate.getMonth() + 1;
-                      const scheduleDay = scheduleDate.getDate();
-                      return scheduleYear === year && scheduleMonth === month && scheduleDay === day;
-                    }).map((schedule, index) => (
-                      <div key={index} className="bg-blue-100 rounded-md p-1 text-xs mt-1">
-                        {schedule.title}
-                      </div>
-                    ))}
-                  </div>
+                  <div className="flex-1 p-1">
+                  {
+                    (() => {
+                      const daySchedules : Schedule[] = filterSchedulesForDay(schedules, year, month, day);
+                      return (
+                        <>
+                          {daySchedules.slice(0, 2).map((schedule, index) => (
+                            <div className='relative items-center' key={index}>
+                              <div className="bg-blue-100 rounded-md p-1 text-xs mt-1" onClick={()=> showDetails(schedule.id)}>
+                                {schedule.title}
+                              </div>
+                              {isDetailsShown && (
+                              <div className="absolute left-full top-0 ml-3 z-50 w-64 p-4 bg-white rounded-md shadow-lg">
+                                <div className='relative'>
+                                  <div className="flex items-center justify-between rounded-t ">
+                                      <button type="button" className="bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" onClick={()=> setIsDetailsShown(!isDetailsShown)}>
+                                          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                          </svg>
+                                          <span className="sr-only">Close modal</span>
+                                      </button>
+                                  </div>
+                                </div>
+                                  <p>予定の詳細情報</p>
+                                  {/* 詳細情報を表示 */}
+                              </div>
+                              )}
+                            </div>
+                          ))}
+                          {daySchedules.length > 2 && (
+                            <div className="text-xs mt-1">
+                              他{daySchedules.length - 2}件
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()
+                  }
                 </div>
+              </div>
               );
             })
           )
