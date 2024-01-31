@@ -10,11 +10,9 @@ interface Props {
   selectedOption : "month" | "week"
   isAdd : boolean
   setIsAdd : React.Dispatch<React.SetStateAction<boolean>>;
-  setSchedules : React.Dispatch<React.SetStateAction<Schedule[]>>;
-  schedules: Schedule[];
 }
 
-const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd,setIsAdd } : Props) => {
+const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, setIsAdd } : Props) => {
   // カレンダーのデータを生成
   const { day, end_of_month } = createCalendarData(year, month);
   const cal : number[][] = make_cal(day, end_of_month);
@@ -57,8 +55,22 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd,se
               // 今日の日付かどうかを確認
               const isToday = day === todayDate && month === currentMonth && year === currentYear;
               return (
-                <div key={`day-${i}-${j}`} className={`w-full h-28 border py-2 border-gray-300 ${isToday ? 'bg-gray-200' : ''} ${i === 0 ? 'border-t-0' : ''}`}>
-                  {day || ''}
+                <div key={`day-${i}-${j}`} className={`w-full h-28 border py-2 border-gray-300 flex flex-col ${isToday ? 'bg-gray-200' : ''} ${i === 0 ? 'border-t-0' : ''}`}>
+                  <div className="text-sm">{day || ''}</div>
+                  {/* 予定を表示する部分 */}
+                  <div className="flex-1 overflow-y-auto p-1">
+                    {schedules.filter(schedule => {
+                      const scheduleDate = new Date(schedule.at);
+                      const scheduleYear = scheduleDate.getFullYear();
+                      const scheduleMonth = scheduleDate.getMonth() + 1;
+                      const scheduleDay = scheduleDate.getDate();
+                      return scheduleYear === year && scheduleMonth === month && scheduleDay === day;
+                    }).map((schedule, index) => (
+                      <div key={index} className="bg-blue-100 rounded-md p-1 text-xs mt-1">
+                        {schedule.title}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               );
             })
@@ -70,9 +82,23 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd,se
             // 今日の日付かどうかを確認
             const isToday = day === todayDate && month === currentMonth && year === currentYear;
             return (
-              <div key={`day-0-${j}`} className={`w-full border-t-0 h-svh border py-2 border-gray-300 ${isToday ? 'bg-gray-200' : ''}`}>
-                {day || ''}
-              </div>
+              <div key={`day-0-${j}`} className={`w-full h-svh border py-2 border-gray-300 flex flex-col ${isToday ? 'bg-gray-200' : ''}`}>
+                <div className="text-sm">{day || ''}</div>
+                {/* 予定を表示する部分 */}
+                <div className="flex-1 overflow-y-auto p-1">
+                  {schedules.filter(schedule => {
+                    const scheduleDate = new Date(schedule.at);
+                    const scheduleYear = scheduleDate.getFullYear();
+                    const scheduleMonth = scheduleDate.getMonth() + 1;
+                    const scheduleDay = scheduleDate.getDate();
+                    return scheduleYear === year && scheduleMonth === month && scheduleDay === day;
+                  }).map((schedule, index) => (
+                    <div key={index} className="bg-blue-100 rounded-md p-1 text-xs mt-1">
+                      {schedule.title}
+                    </div>
+                  ))}
+                </div>
+              </div>              
             );
           })
         )
