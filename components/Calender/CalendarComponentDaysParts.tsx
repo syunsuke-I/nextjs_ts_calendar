@@ -1,6 +1,7 @@
-import React from 'react';
+import React ,{useState} from 'react';
 import {createCalendarData} from '../../utils/utils'; 
 import AddFormComponent from '../Modal/AddForm';
+import {Schedule} from '../../types/Schedule';
 
 interface Props {
   year: number;
@@ -9,17 +10,21 @@ interface Props {
   selectedOption : "month" | "week"
   isAdd : boolean
   setIsAdd : React.Dispatch<React.SetStateAction<boolean>>;
+  setSchedules : React.Dispatch<React.SetStateAction<Schedule[]>>;
+  schedules: Schedule[];
 }
 
 const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd,setIsAdd } : Props) => {
   // カレンダーのデータを生成
   const { day, end_of_month } = createCalendarData(year, month);
   const cal : number[][] = make_cal(day, end_of_month);
-
+  
   const today = new Date();
   const todayDate = today.getDate();
   const currentMonth = today.getMonth() + 1;
   const currentYear = today.getFullYear();
+
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
 
   function make_cal(day: Date, end_of_month: Date): number[][] {
 
@@ -76,6 +81,8 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd,se
       <AddFormComponent
         isAdd={isAdd}
         setIsAdd={setIsAdd}
+        setSchedules={setSchedules}
+        schedules={schedules}
       />
     </>
   )

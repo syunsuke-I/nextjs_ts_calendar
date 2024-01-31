@@ -2,31 +2,30 @@ import { UUID } from 'crypto';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
+import {Schedule} from '../../types/Schedule';
 
 interface Props {
   isAdd : boolean
   setIsAdd : React.Dispatch<React.SetStateAction<boolean>>;
+  setSchedules:React.Dispatch<React.SetStateAction<Schedule[]>>;
+  schedules: Schedule[];
 }
 
-interface Schedule {
-  id : string
-  title: string;
-  at : number
-}
+const AddFormComponent = ({ isAdd,setIsAdd,schedules,setSchedules } : Props) =>{
 
-const AddFormComponent = ({ isAdd,setIsAdd } : Props) =>{
-
-  const { register, handleSubmit } = useForm<Schedule>();
-  const [schedules, setSchedules] = useState<Schedule>();
+  const { register, handleSubmit, reset } = useForm<Schedule>();
 
   const onSubmit = (data : Schedule) => {
     const uniqueId : string = uuidv4();
-    const newSchedule: Schedule = {
+    const newSchedule : Schedule = {
       id : uniqueId,
       title : data.title,
       at : data.at,
     }
-    setSchedules(newSchedule); 
+    schedules.push(newSchedule)
+    setSchedules(schedules);
+    setIsAdd(!isAdd);
+    reset();
   };
 
   return(
