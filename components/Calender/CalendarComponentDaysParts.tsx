@@ -2,6 +2,8 @@ import React ,{useState} from 'react';
 import {createCalendarData} from '../../utils/utils'; 
 import AddFormComponent from '../Modal/AddForm';
 import {Schedule} from '../../types/Schedule';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 interface Props {
   year: number;
@@ -33,7 +35,12 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
   // 詳細を隠す関数
   const hideDetails = () => {
     setVisibleDetailsId('');
-  };  
+  };
+  
+  function deleteSchedule(id : string){
+    const newSchedules = schedules.filter(schedule => schedule.id !== id);
+    setSchedules(newSchedules);
+  }
 
   const filterSchedulesForDay = (schedules: Schedule[], year: number, month: number, day: number) : Schedule[] => {
     return schedules.filter(schedule => {
@@ -92,18 +99,30 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
                               </div>
                               {visibleDetailsId === schedule.id && (
                               <div className={`absolute top-0 ml-3 z-50 w-64 p-4 bg-white rounded-md shadow-lg ${j % 6 === 0 ?  'right-full' : 'left-full'}`}>
-                                <div className='relative'>
-                                  <div className="flex items-center justify-between rounded-t ">
-                                      <button type="button" className="bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" onClick={() => hideDetails()}>
-                                          <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                                          </svg>
-                                          <span className="sr-only">Close modal</span>
-                                      </button>
+                                <div className='flex justify-end gap-x-10'>
+                                  <div className="flex items-center justify-between rounded-t">
+                                    <div className="flex items-center">
+                                      <EditIcon/>
+                                    </div>
+                                    <div className="flex items-center">
+                                      <DeleteIcon onClick={()=> deleteSchedule(schedule.id)}/>
+                                    </div>
+                                    <button type="button" className="bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" onClick={() => hideDetails()}>
+                                        <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                        <span className="sr-only">Close modal</span>
+                                    </button>
                                   </div>
                                 </div>
-                                  <p>予定の詳細情報</p>
-                                  {/* 詳細情報を表示 */}
+                                <div className='flex flex-col'>
+                                  <div>
+                                    {schedule.title}
+                                  </div>
+                                  <div>
+                                    {schedule.at}
+                                  </div>
+                                </div>
                               </div>
                               )}
                             </div>
