@@ -87,11 +87,11 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
                         <>
                           {daySchedules.slice(0, 2).map((schedule, index) => (
                             <div className='relative items-center' key={index}>
-                              <div className="bg-blue-100 rounded-md p-1 text-xs mt-1" onClick={()=> showDetails(schedule.id)}>
+                              <div className= "bg-blue-100 rounded-md p-1 text-xs mt-1 " onClick={()=> showDetails(schedule.id)}>
                                 {schedule.title}
                               </div>
                               {visibleDetailsId === schedule.id && (
-                              <div className="absolute left-full top-0 ml-3 z-50 w-64 p-4 bg-white rounded-md shadow-lg">
+                              <div className={`absolute top-0 ml-3 z-50 w-64 p-4 bg-white rounded-md shadow-lg ${j % 6 === 0 ?  'right-full' : 'left-full'}`}>
                                 <div className='relative'>
                                   <div className="flex items-center justify-between rounded-t ">
                                       <button type="button" className="bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" onClick={() => hideDetails()}>
