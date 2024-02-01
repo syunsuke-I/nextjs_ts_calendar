@@ -23,7 +23,17 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
   const currentYear = today.getFullYear();
 
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  let [isDetailsShown, setIsDetailsShown] = useState(false);
+  const [visibleDetailsId, setVisibleDetailsId] = useState('');
+
+  // 詳細を表示する関数
+  const showDetails = (id : string) => {
+    setVisibleDetailsId(id);
+  };
+
+  // 詳細を隠す関数
+  const hideDetails = () => {
+    setVisibleDetailsId('');
+  };  
 
   const filterSchedulesForDay = (schedules: Schedule[], year: number, month: number, day: number) : Schedule[] => {
     return schedules.filter(schedule => {
@@ -57,11 +67,6 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
     return cal;
   }
 
-  function showDetails(scheduleId : string){
-    console.log(scheduleId)
-    setIsDetailsShown(!isDetailsShown)
-  }
-
   return(
     <>
       {selectedOption !== "week" ? 
@@ -85,11 +90,11 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
                               <div className="bg-blue-100 rounded-md p-1 text-xs mt-1" onClick={()=> showDetails(schedule.id)}>
                                 {schedule.title}
                               </div>
-                              {isDetailsShown && (
+                              {visibleDetailsId === schedule.id && (
                               <div className="absolute left-full top-0 ml-3 z-50 w-64 p-4 bg-white rounded-md shadow-lg">
                                 <div className='relative'>
                                   <div className="flex items-center justify-between rounded-t ">
-                                      <button type="button" className="bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" onClick={()=> setIsDetailsShown(!isDetailsShown)}>
+                                      <button type="button" className="bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" onClick={() => hideDetails()}>
                                           <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                           </svg>
