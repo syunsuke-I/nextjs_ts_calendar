@@ -1,9 +1,10 @@
 import React ,{useState} from 'react';
+
 import {createCalendarData} from '../../utils/utils'; 
 import AddFormComponent from '../Modal/AddForm';
-import {Schedule} from '../../types/Schedule';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import CalendarComponentRUDParts from './CalendarComponentRUDParts';
+
+import { Schedule } from '../../types/Schedule';
 
 interface Props {
   year: number;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, setIsAdd } : Props) => {
+
   // カレンダーのデータを生成
   const { day, end_of_month } = createCalendarData(year, month);
   const cal : number[][] = make_cal(day, end_of_month);
@@ -38,7 +40,7 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
   };
   
   function deleteSchedule(id : string){
-    const newSchedules = schedules.filter(schedule => schedule.id !== id);
+    const newSchedules = schedules.filter((schedule: { id: string; }) => schedule.id !== id);
     setSchedules(newSchedules);
   }
 
@@ -50,7 +52,18 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
       const scheduleDay : number = scheduleDate.getDate();
       return scheduleYear === year && scheduleMonth === month && scheduleDay === day;
     });
-  };  
+  };
+
+  function editSchedule(value: string, id: string) {
+    const newSchedules = schedules.map((schedule) => {
+      if (schedule.id === id) {
+        return { ...schedule, title: value };
+      }
+      return schedule;
+    });
+    setSchedules(newSchedules);
+  }
+  
 
   function make_cal(day: Date, end_of_month: Date): number[][] {
 
@@ -76,7 +89,7 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
 
   return(
     <>
-      {selectedOption !== "week" ? 
+    {selectedOption !== "week" ?
         (
           cal.map((week, i) =>
             week.map((day, j) => {
@@ -98,32 +111,13 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
                                 {schedule.title}
                               </div>
                               {visibleDetailsId === schedule.id && (
-                              <div className={`absolute top-0 ml-3 z-50 w-64 p-4 bg-white rounded-md shadow-lg ${j % 6 === 0 ?  'right-full' : 'left-full'}`}>
-                                <div className='flex justify-end gap-x-10'>
-                                  <div className="flex items-center justify-between rounded-t">
-                                    <div className="flex items-center">
-                                      <EditIcon/>
-                                    </div>
-                                    <div className="flex items-center">
-                                      <DeleteIcon onClick={()=> deleteSchedule(schedule.id)}/>
-                                    </div>
-                                    <button type="button" className="bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" onClick={() => hideDetails()}>
-                                        <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                                        </svg>
-                                        <span className="sr-only">Close modal</span>
-                                    </button>
-                                  </div>
-                                </div>
-                                <div className='flex flex-col'>
-                                  <div>
-                                    {schedule.title}
-                                  </div>
-                                  <div>
-                                    {schedule.at}
-                                  </div>
-                                </div>
-                              </div>
+                                <CalendarComponentRUDParts
+                                  setVisibleDetailsId={setVisibleDetailsId}
+                                  editSchedule={editSchedule}
+                                  deleteSchedule={deleteSchedule}
+                                  schedule={schedule}
+                                  j={j}
+                                />
                               )}
                             </div>
                           ))}
@@ -151,16 +145,29 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
               <div key={`day-0-${j}`} className={`w-full h-svh border py-2 border-gray-300 flex flex-col ${isToday ? 'bg-gray-200' : ''}`}>
                 <div className="text-sm">{day || ''}</div>
                 {/* 予定を表示する部分 */}
-                <div className="flex-1 overflow-y-auto p-1">
-                  {schedules.filter(schedule => {
+                <div className="flex-1 x-30 overflow-visible p-1">
+                  {schedules.filter((schedule: Schedule) => {
                     const scheduleDate = new Date(schedule.at);
                     const scheduleYear = scheduleDate.getFullYear();
                     const scheduleMonth = scheduleDate.getMonth() + 1;
                     const scheduleDay = scheduleDate.getDate();
                     return scheduleYear === year && scheduleMonth === month && scheduleDay === day;
-                  }).map((schedule, index) => (
-                    <div key={index} className="bg-blue-100 rounded-md p-1 text-xs mt-1">
-                      {schedule.title}
+                  }
+                  ).map((schedule : Schedule, index : number) => (
+                    <div className='relative items-center' key={index}>
+                      <div className="bg-blue-100 rounded-md p-1 text-xs mt-1" onClick={()=> showDetails(schedule.id)}>
+                        {schedule.title}
+                      </div>
+                      {visibleDetailsId === schedule.id && (
+                        <CalendarComponentRUDParts
+                          setVisibleDetailsId={setVisibleDetailsId}
+                          editSchedule={editSchedule}
+                          deleteSchedule={deleteSchedule}
+                          schedule={schedule}
+                          j={j}
+                        />
+                      )
+                      } 
                     </div>
                   ))}
                 </div>

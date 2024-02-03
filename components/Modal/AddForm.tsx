@@ -22,8 +22,7 @@ const AddFormComponent = ({ isAdd,setIsAdd,schedules,setSchedules } : Props) =>{
       title : data.title,
       at : data.at,
     }
-    schedules.push(newSchedule)
-    setSchedules(schedules);
+    setSchedules([...schedules, newSchedule]);
     setIsAdd(!isAdd);
     reset();
   };
