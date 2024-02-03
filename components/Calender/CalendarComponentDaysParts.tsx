@@ -13,9 +13,11 @@ interface Props {
   selectedOption : "month" | "week"
   isAdd : boolean
   setIsAdd : React.Dispatch<React.SetStateAction<boolean>>;
+  visibleDetailsId : string;
+  setVisibleDetailsId :  React.Dispatch<React.SetStateAction<string>>;
 }
 
-const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, setIsAdd } : Props) => {
+const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, setIsAdd , visibleDetailsId, setVisibleDetailsId } : Props) => {
 
   // カレンダーのデータを生成
   const { day, end_of_month } = createCalendarData(year, month);
@@ -27,16 +29,11 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
   const currentYear = today.getFullYear();
 
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [visibleDetailsId, setVisibleDetailsId] = useState('');
+
 
   // 詳細を表示する関数
   const showDetails = (id : string) => {
     setVisibleDetailsId(id);
-  };
-
-  // 詳細を隠す関数
-  const hideDetails = () => {
-    setVisibleDetailsId('');
   };
   
   function deleteSchedule(id : string){

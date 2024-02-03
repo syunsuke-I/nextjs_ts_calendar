@@ -21,7 +21,7 @@ const CalendarComponentRUDParts = (({ setVisibleDetailsId,editSchedule,deleteSch
   // 詳細を隠す関数
   const hideDetails = () => {
     setVisibleDetailsId('');
-  };  
+  };
 
   return (
     <div className={`absolute top-0 ml-3 w-64 p-4 bg-white rounded-md shadow-lg ${j % 6 === 0 ?  'right-full' : 'left-full'}`}>

@@ -30,6 +30,8 @@ const ParentComponent = () => {
 
   let [isAdd, setIsAdd] = useState(false);
 
+  const [visibleDetailsId, setVisibleDetailsId] = useState('');
+
   // オプションが選択されたときのハンドラ
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
@@ -85,6 +87,10 @@ const ParentComponent = () => {
     }
   };
 
+  const handleAddClick = () => {
+    setVisibleDetailsId('');
+    setIsAdd(!isAdd);
+  };
 
   return (
     <>
@@ -119,7 +125,7 @@ const ParentComponent = () => {
               </span>
             </div>
             {/* 追加ボタン */}
-            <span className="text-lg font-bold z-50" onClick={() => setIsAdd(!isAdd)}>
+            <span className="text-lg font-bold z-50" onClick={()=>handleAddClick()}>
               <AddIcon/>
             </span>
           </div>
@@ -133,7 +139,6 @@ const ParentComponent = () => {
             <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">木</div>
             <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">金</div>
             <div className="w-full h-5 font-bold text-xs text-gray-300 border border-gray-300 py-1 border-b-0">土</div>
-            {/* CalendarComponent のレンダリング */}
               <CalendarComponent 
                 year={selectedYear} 
                 month={selectedMonth} 
@@ -141,6 +146,8 @@ const ParentComponent = () => {
                 selectedWeek={selectedWeek}
                 isAdd={isAdd}
                 setIsAdd={setIsAdd}
+                visibleDetailsId={visibleDetailsId}
+                setVisibleDetailsId={setVisibleDetailsId}
               />
             </div>
         </div>
