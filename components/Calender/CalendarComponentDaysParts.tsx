@@ -86,54 +86,7 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
 
   return(
     <>
-    {selectedOption !== "week" ?
-        (
-          cal.map((week, i) =>
-            week.map((day, j) => {
-              // 今日の日付かどうかを確認
-              const isToday = day === todayDate && month === currentMonth && year === currentYear;
-              return (
-                <div key={`day-${i}-${j}`} className={`w-full h-28 border py-2 border-gray-300 flex flex-col ${isToday ? 'bg-gray-200' : ''} ${i === 0 ? 'border-t-0' : ''}`}>
-                  <div className="text-sm">{day || ''}</div>
-                  {/* 予定を表示する部分 */}
-                  <div className="flex-1 p-1">
-                  {
-                    (() => {
-                      const daySchedules : Schedule[] = filterSchedulesForDay(schedules, year, month, day);
-                      return (
-                        <>
-                          {daySchedules.slice(0, 2).map((schedule, index) => (
-                            <div className='relative items-center' key={index}>
-                              <div className= "bg-blue-100 rounded-md p-1 text-xs mt-1 " onClick={()=> showDetails(schedule.id)}>
-                                {schedule.title}
-                              </div>
-                              {visibleDetailsId === schedule.id && (
-                                <CalendarComponentRUDParts
-                                  setVisibleDetailsId={setVisibleDetailsId}
-                                  editSchedule={editSchedule}
-                                  deleteSchedule={deleteSchedule}
-                                  schedule={schedule}
-                                  j={j}
-                                />
-                              )}
-                            </div>
-                          ))}
-                          {daySchedules.length > 2 && (
-                            <div className="text-xs mt-1">
-                              他{daySchedules.length - 2}件
-                            </div>
-                          )}
-                        </>
-                      );
-                    })()
-                  }
-                </div>
-              </div>
-              );
-            })
-          )
-        ) 
-        : 
+    {selectedOption === "week" ?
         (
           cal[selectedWeek].map((day, j) => {
             // 今日の日付かどうかを確認
@@ -161,7 +114,7 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
                           editSchedule={editSchedule}
                           deleteSchedule={deleteSchedule}
                           schedule={schedule}
-                          j={j}
+                          wnum={j}
                         />
                       )
                       } 
@@ -171,6 +124,54 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
               </div>              
             );
           })
+        ) 
+        : 
+        (
+          cal.map((week, i) =>
+            week.map((day, j) => {
+              // 今日の日付かどうかを確認
+              const isToday = day === todayDate && month === currentMonth && year === currentYear;
+              return (
+                <div key={`day-${i}-${j}`} className={`w-full h-28 border py-2 border-gray-300 flex flex-col ${isToday ? 'bg-gray-200' : ''} ${i === 0 ? 'border-t-0' : ''}`}>
+                  <div className="text-sm">{day || ''}</div>
+                  {/* 予定を表示する部分 */}
+                  <div className="flex-1 p-1">
+                  {
+                    (() => {
+                      const daySchedules : Schedule[] = filterSchedulesForDay(schedules, year, month, day);
+                      return (
+                        <>
+                          {daySchedules.slice(0, 2).map((schedule, index) => (
+                            <div className='relative items-center' key={index}>
+                              <div className= "bg-blue-100 rounded-md p-1 text-xs mt-1 " onClick={()=> showDetails(schedule.id)}>
+                                {schedule.title}
+                              </div>
+                              {visibleDetailsId === schedule.id && (
+                                <CalendarComponentRUDParts
+                                  setVisibleDetailsId={setVisibleDetailsId}
+                                  editSchedule={editSchedule}
+                                  deleteSchedule={deleteSchedule}
+                                  schedule={schedule}
+                                  wnum={j}
+                                />
+                              )}
+                            </div>
+                          ))}
+                          {daySchedules.length > 2 && (
+                            <div className="text-xs mt-1">
+                              他{daySchedules.length - 2}件
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()
+                  }
+                </div>
+              </div>
+              );
+            })
+          )
+
         )
       }
       {/* モーダル */}

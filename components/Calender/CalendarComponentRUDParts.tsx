@@ -11,10 +11,10 @@ interface Props {
   editSchedule : EditScheduleFunction
   deleteSchedule : DeleteScheduleFunction
   schedule : Schedule
-  j : number // 列を管理する数字 例えばカレンダーの一番左は0 一番右は6
+  wnum : number // 列を管理する数字 例えばカレンダーの一番左は0 一番右は6
 }
 
-const CalendarComponentRUDParts = (({ setVisibleDetailsId,editSchedule,deleteSchedule,schedule,j } : Props) => {
+const CalendarComponentRUDParts = (({ setVisibleDetailsId,editSchedule,deleteSchedule,schedule,wnum } : Props) => {
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -24,7 +24,7 @@ const CalendarComponentRUDParts = (({ setVisibleDetailsId,editSchedule,deleteSch
   };
 
   return (
-    <div className={`absolute top-0 ml-3 w-64 p-4 bg-white rounded-md shadow-lg ${j % 6 === 0 ?  'right-full' : 'left-full'}`}>
+    <div className={`absolute top-0 ml-3 w-64 p-4 bg-white rounded-md shadow-lg ${wnum !== 0 && wnum % 6 === 0 ?  'right-full' : 'left-full'}`}>
       <div className='flex justify-end gap-x-10'>
         <div className="flex items-center justify-between rounded-t">
           <div className="flex items-center">

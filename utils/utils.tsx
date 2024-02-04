@@ -1,4 +1,8 @@
 
+import { useState,useEffect } from 'react';
+
+import {OptionType} from "../types/Schedule"
+
 // カレンダーのデータを生成する関数
 export function createCalendarData(year: number, month: number) {
   let day : Date = new Date(year, month - 1, 1);
@@ -9,3 +13,20 @@ export function createCalendarData(year: number, month: number) {
   return { day, end_of_month, firstDayOfWeek, weeksInMonth };
 }
 
+export function useCalendarNavigation() {
+  let [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  let [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth() + 1);
+  let [selectedWeek, setSelectedWeek] = useState(0);
+  const [selectedOption, setSelectedOption] = useState<OptionType>('month');
+
+  return {
+    selectedYear,
+    setSelectedYear,
+    selectedMonth,
+    setSelectedMonth,
+    selectedWeek,
+    setSelectedWeek,
+    selectedOption,
+    setSelectedOption,
+  };
+}

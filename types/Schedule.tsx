@@ -5,3 +5,6 @@ export interface Schedule {
   title: string;
   at : number
 }
+
+
+export type OptionType = 'month' | 'week';
