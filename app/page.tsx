@@ -1,8 +1,12 @@
+import React from 'react';
+import Calendar from '../components/Calender/Calender';
 
-export default function Home() {
+const App: React.FC = () => {
   return (
-      <>
-        Hello World
-      </>
+    <div className="App">
+      <Calendar/>
+    </div>
   );
 }
+
+export default App;
