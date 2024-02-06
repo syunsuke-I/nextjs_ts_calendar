@@ -96,14 +96,9 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
                 <div className="text-sm">{day || ''}</div>
                 {/* 予定を表示する部分 */}
                 <div className="flex-1 x-30 overflow-visible p-1">
-                  {schedules.filter((schedule: Schedule) => {
-                    const scheduleDate = new Date(schedule.at);
-                    const scheduleYear = scheduleDate.getFullYear();
-                    const scheduleMonth = scheduleDate.getMonth() + 1;
-                    const scheduleDay = scheduleDate.getDate();
-                    return scheduleYear === year && scheduleMonth === month && scheduleDay === day;
-                  }
-                  ).map((schedule : Schedule, index : number) => (
+                  {
+                filterSchedulesForDay(schedules, year, month, day).slice(0, 2)
+                .map((schedule : Schedule, index : number) => (
                     <div className='relative items-center' key={index}>
                       <div className="bg-blue-100 rounded-md p-1 text-xs mt-1" onClick={()=> showDetails(schedule.id)}>
                         {schedule.title}
@@ -138,7 +133,7 @@ const CalendarComponent = ({ year, month, selectedWeek ,selectedOption, isAdd, s
                   <div className="flex-1 p-1">
                   {
                     (() => {
-                      const daySchedules : Schedule[] = filterSchedulesForDay(schedules, year, month, day);
+                      const daySchedules : Schedule[] = filterSchedulesForDay(schedules, year, month, day).slice(0, 2)
                       return (
                         <>
                           {daySchedules.slice(0, 2).map((schedule, index) => (
